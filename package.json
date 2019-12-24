@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "client": "vue-cli-service serve",
+    "server": "node src/server/route.js",
     "serve": "vue-cli-service serve | node src/server/route.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
