@@ -1,60 +1,36 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <HelloWorld/>
-    </v-content>
-  </v-app>
+  <div id="app">
+    <div>Yo we got this: {{stats}}</div>
+    <div>Yo the UTC is: {{utc}}</div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+const BACKEND_URL = window.location.hostname;
 
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
+  name: 'app',
+  data() {
+    return {
+      stats: null,
+      utc: null
+    }
   },
 
-  data: () => ({
-    //
-  }),
-};
+  async created() {
+    const res = await fetch(`http://${BACKEND_URL}:2000/api/stats`);
+    const { data } = await res.json();
+
+    this.stats = data;
+
+    setInterval(() => {
+      var date  = new Date();
+      var hours = date.getUTCHours();
+      var mins  = date.getUTCMinutes();
+      var secs  = date.getUTCSeconds();
+
+      this.utc = `${hours}:${mins}:${secs}`;
+    }, 500);
+  }
+}
 </script>
