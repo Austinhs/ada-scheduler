@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+const BACKEND_URL = window.location.hostname;
 export default {
   name: 'app',
   data() {
@@ -16,7 +16,7 @@ export default {
 
   methods: {
     async getStats() {
-      const res = await fetch('localhost:2000/api/stats');
+      const res = await fetch(`${BACKEND_URL}:2000/api/stats`);
 
       this.stats = await res.json();
     }
