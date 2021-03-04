@@ -1,7 +1,16 @@
-const express = require('express');
-const app     = express();
-const request = require('request');
-const port    = 2000;
+const express          = require('express');
+const app              = express();
+const request          = require('request');
+const { Pool, Client } = require('pg');
+const port             = 2000;
+
+const db = new Pool({
+    user: 'test',
+    host: 'test',
+    database: 'test',
+    password: 'test',
+    port: 1234
+});
 
 var blocks  = {
     epoch_1: [],
@@ -51,10 +60,11 @@ function updateEpochInfo() {
     let target_epoch = 'epoch_' + blocks.current_epoch;
 
     if(blocks[target_epoch] != [] && blocks[target_epoch].length > 0) {
-        let last_epoch_date = new Date(blocks[target_epoch][0].scheduled_at_time);
-        let date_obj        = new Date();
-        let now_day         = date_obj.getUTCDay();
-        let last_epoch_day  = last_epoch_date.getUTCDay();
+        let last_epoch_index = blocks[target_epoch].length - 1;
+        let last_epoch_date  = new Date(blocks[target_epoch][last_epoch_index].scheduled_at_time);
+        let date_obj         = new Date();
+        let now_day          = date_obj.getUTCDay();
+        let last_epoch_day   = last_epoch_date.getUTCDay();
 
         // New Epoch
         if(now_day != last_epoch_day) {

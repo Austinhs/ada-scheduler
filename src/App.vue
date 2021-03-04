@@ -85,10 +85,6 @@ function sortBlockData(data) {
 
     data[index].sort(function(a,b) {
       // Force none pending cards to the bottom
-      if(a.status != 'Pending') {
-        a.scheduled_at_date = 9999999999999999999999999999999999999999999;
-      }
-
       return a.scheduled_at_date - b.scheduled_at_date;
     });
   }
@@ -214,6 +210,7 @@ export default {
 
         let closest_time_dt = new Date(closest_block.scheduled_at_time)
         let closest_time    = getUTCTime(closest_time_dt, false);
+
         let closest_now_dt  = new Date();
         let closest_now     = getUTCTime(closest_now_dt, false);
 
@@ -221,6 +218,10 @@ export default {
           this.timeUntil = '00:00:00';
           this.updateBlocks();
           return;
+        }
+
+        if(closest_time_dt.getUTCDay() > closest_now_dt.getUTCDay()) {
+          closest_time.hours += 24;
         }
 
         let hours = Math.abs(closest_time.hours - closest_now.hours);
